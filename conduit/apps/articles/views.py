@@ -230,16 +230,12 @@ class ArticlesFeedAPIView(generics.ListAPIView):
 
         return self.get_paginated_response(serializer.data)
 
-
-from django.db import connection
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import get_user_model
 
-@csrf_exempt
 def buscar_usuario_vulnerable(request):
-    # Vulnerabilidad intencional para la tarea de seguridad: SQL Injection
+    # Remediación: Uso del ORM de Django (consultas parametrizadas que previenen SQL Injection)
     username = request.GET.get('username', '')
-    cursor = connection.cursor()
-    cursor.execute("SELECT * FROM auth_user WHERE username = '" + username + "'")
-    rows = cursor.fetchall()
-    return HttpResponse(f"Resultados encontrados: {len(rows)}")
+    User = get_user_model()
+    users = User.objects.filter(username=username)
+    return HttpResponse(f"Resultados encontrados: {users.count()}")
