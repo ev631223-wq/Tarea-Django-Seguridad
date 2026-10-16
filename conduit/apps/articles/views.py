@@ -239,3 +239,5 @@ def buscar_usuario_vulnerable(request):
     User = get_user_model()
     users = User.objects.filter(username=username)
     return HttpResponse(f"Resultados encontrados: {users.count()}")
+
+    # Documentación: Endpoint remediado contra SQL Injection usando Django ORM
